@@ -19,7 +19,7 @@ struct HealthResponse {
 async fn health_check() -> impl Responder {
     let response = HealthResponse {
         status: "ok".to_string(),
-        message: "Service is healthy".to_string(),
+        message: "Service is healthy!!".to_string(),
     };
     HttpResponse::Ok().json(response)
 }
