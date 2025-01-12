@@ -1,0 +1,19 @@
+Hi {lead_name},
+
+Hope you’re doing well!
+
+Will keep my request short to respect your time. Reaching out regarding potential opportunities at your company.
+
+Key Highlights:
+Education: B.Tech (CSE, 9.9) – Chitkara University
+Work Experience: 3+ years in SDE – Glue Labs
+Frontend Skills: ReactJS, JavaScript, NextJS, Redux, Tailwind
+Backend Skills: NodeJS, PostgreSQL, NestJS
+Additional Skills: Git, AWS, Docker, DSA
+Projects: Worked on an Email Marketing Tool at Glue Labs, where I designed an automated workflow system for sending AI-generated emails.
+
+
+PFA, latest resume. Thanks for your time and consideration. Looking forward to connecting!
+
+Regards,
+Devansh Walia
