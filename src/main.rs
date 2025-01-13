@@ -62,9 +62,9 @@ async fn upload_csv(
             .map_err(|e| error::ErrorInternalServerError(e))?;
         let body_template = read_file_to_string("src/templates/email_template.txt")
             .map_err(|e| error::ErrorInternalServerError(e))?;
-        let pdf_files = get_attachment("src/templates")?;
+        let pdf_file_paths = get_attachment("src/templates")?;
 
-        let is_empty = pdf_files.is_empty();
+        let is_empty = pdf_file_paths.is_empty();
 
         if is_empty {
             return Err(error::ErrorInternalServerError("No resume files found"));
@@ -74,17 +74,20 @@ async fn upload_csv(
             let body = body_template.replace("{lead_name}", &record.first_name);
 
             match email_service
-                .send_email(&record.email, &subject, &body)
+                .send_email(&record.email, &subject, &body, pdf_file_paths.clone())
                 .await
             {
                 Ok(_) => count_sent += 1,
-                Err(_) => count_failed += 1,
+                Err(e) => {
+                    eprintln!("Failed to send email to {}: {:?}", record.email, e);
+                    count_failed += 1;
+                }
             }
         }
 
         return Ok(HttpResponse::Ok().json(format!(
             "Emails sent: {}, Failed: {}, pdf: {}",
-            count_sent, count_failed, pdf_files.len()
+            count_sent, count_failed, pdf_file_paths.len()
         )));
     }
 
