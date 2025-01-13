@@ -12,7 +12,7 @@ pub struct EmailService {
 }
 
 impl EmailService {
-    pub fn new(email: String, user_name: String, password: String) -> Self {
+    pub fn new(email: String, name: String, password: String) -> Self {
         let creds = Credentials::new(email.clone(), password);
         
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::relay("smtp.gmail.com")
