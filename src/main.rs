@@ -91,6 +91,7 @@ async fn main() -> std::io::Result<()> {
     let settings = Settings::new().expect("Failed to load settings");
     let email_service = web::Data::new(EmailService::new(
         settings.smtp_email,
+        settings.smtp_user_name,
         settings.smtp_password,
     ));
     

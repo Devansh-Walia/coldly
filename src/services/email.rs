@@ -8,10 +8,11 @@ use lettre::{
 pub struct EmailService {
     smtp_transport: AsyncSmtpTransport<Tokio1Executor>,
     from_email: String,
+    user_name: String
 }
 
 impl EmailService {
-    pub fn new(email: String, password: String) -> Self {
+    pub fn new(email: String, user_name: String, password: String) -> Self {
         let creds = Credentials::new(email.clone(), password);
         
         let smtp_transport = AsyncSmtpTransport::<Tokio1Executor>::relay("smtp.gmail.com")
@@ -22,6 +23,7 @@ impl EmailService {
         EmailService {
             smtp_transport,
             from_email: email,
+            user_name: name
         }
     }
 

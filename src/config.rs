@@ -4,6 +4,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct Settings {
     pub port: u16,
+    pub smtp_user_name: String,
     pub smtp_email: String,
     pub smtp_password: String,
 }
