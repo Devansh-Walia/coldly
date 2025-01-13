@@ -25,7 +25,7 @@ async fn health_check() -> impl Responder {
     HttpResponse::Ok().json(response)
 }
 
-#[post("/upload-csv")]
+#[post("/send-emails")]
 async fn upload_csv(
     mut payload: Multipart,
     email_service: web::Data<EmailService>,
