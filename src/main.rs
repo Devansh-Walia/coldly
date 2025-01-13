@@ -8,7 +8,7 @@ mod config;
 mod models;
 use crate::config::Settings;
 mod services;
-use crate::services::{process_csv, EmailService};
+use crate::services::{process_csv, EmailService, read_file_to_string};
 
 #[derive(Serialize)]
 struct HealthResponse {
@@ -51,22 +51,34 @@ async fn upload_csv(
                 .map_err(|e| error::ErrorInternalServerError(e))?;
         }
 
-
         // Process the CSV file
         let records = process_csv(temp_file.reopen().map_err(|e| error::ErrorInternalServerError(e))?)
             .map_err(|e| error::ErrorInternalServerError(e))?;
 
-        // Send email notification
-        email_service
-            .send_email(
-                "some-email@gmail.com",
-                "CSV Processing Complete",
-                &format!("Processed {} records from CSV file", records.len()),
-            )
-            .await
+        let mut count_sent = 0;
+        let mut count_failed = 0;
+
+        let subject = read_file_to_string("src/templates/email_subject.txt")
+            .map_err(|e| error::ErrorInternalServerError(e))?;
+        let body_template = read_file_to_string("src/templates/email_template.txt")
             .map_err(|e| error::ErrorInternalServerError(e))?;
 
-        return Ok(HttpResponse::Ok().json(records));
+        for record in records {
+            let body = body_template.replace("{lead_name}", &record.first_name);
+
+            match email_service
+                .send_email(&record.email, &subject, &body)
+                .await
+            {
+                Ok(_) => count_sent += 1,
+                Err(_) => count_failed += 1,
+            }
+        }
+
+        return Ok(HttpResponse::Ok().json(format!(
+            "Emails sent: {}, Failed: {}",
+            count_sent, count_failed
+        )));
     }
 
     Err(error::ErrorBadRequest("No file provided"))
