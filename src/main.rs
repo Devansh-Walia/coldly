@@ -8,7 +8,7 @@ mod config;
 mod models;
 use crate::config::Settings;
 mod services;
-use crate::services::{process_csv, EmailService, read_file_to_string};
+use crate::services::{process_csv, EmailService, read_file_to_string, get_attachment};
 
 #[derive(Serialize)]
 struct HealthResponse {
@@ -62,6 +62,13 @@ async fn upload_csv(
             .map_err(|e| error::ErrorInternalServerError(e))?;
         let body_template = read_file_to_string("src/templates/email_template.txt")
             .map_err(|e| error::ErrorInternalServerError(e))?;
+        let pdf_files = get_attachment("src/templates")?;
+
+        let is_empty = pdf_files.is_empty();
+
+        if is_empty {
+            return Err(error::ErrorInternalServerError("No resume files found"));
+        }
 
         for record in records {
             let body = body_template.replace("{lead_name}", &record.first_name);
@@ -76,8 +83,8 @@ async fn upload_csv(
         }
 
         return Ok(HttpResponse::Ok().json(format!(
-            "Emails sent: {}, Failed: {}",
-            count_sent, count_failed
+            "Emails sent: {}, Failed: {}, pdf: {}",
+            count_sent, count_failed, pdf_files.len()
         )));
     }
 
