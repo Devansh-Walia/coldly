@@ -86,8 +86,7 @@ async fn upload_csv(
         }
 
         return Ok(HttpResponse::Ok().json(format!(
-            "Emails sent: {}, Failed: {}, pdf: {}",
-            count_sent, count_failed, pdf_file_paths.len()
+            "Emails sent: {}, Failed: {}",count_sent, count_failed
         )));
     }
 
