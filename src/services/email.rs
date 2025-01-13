@@ -34,7 +34,7 @@ impl EmailService {
         body: &str,
     ) -> Result<(), SmtpError> {
         let email = Message::builder()
-            .from(self.from_email.parse().unwrap())
+            .from(format!("{} <{}>",self.user_name, self.from_email).parse().unwrap())
             .to(to.parse().unwrap())
             .subject(subject)
             .body(String::from(body))
