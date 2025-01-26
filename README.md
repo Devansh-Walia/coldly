@@ -7,7 +7,7 @@ install from [here](https://www.rust-lang.org/tools/install)
 
 Configurations:
 
-Please read the [docs](./docs) folder present in the repo to get instructions on how to configure the env to your email.
+Please read the [docs](./docs/how-to-get-env-variables.md) to get instructions on how to configure the env to your email.
 
 How to use:
 
